@@ -1,0 +1,29 @@
+{
+  "schema": {
+    "types": [
+      {
+        "name": "Root",
+        "actions": [
+          {
+            "name": "formFor",
+            "type": "String",
+            "params": [
+              {
+                "name": "action",
+                "type": "String"
+              },
+              {
+                "name": "path",
+                "type": "String"
+              },
+              {
+                "name": "method",
+                "type": "String"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
