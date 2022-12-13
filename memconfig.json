@@ -3,9 +3,27 @@
     "types": [
       {
         "name": "Root",
-        "actions": [
+        "fields": [
           {
-            "name": "formFor",
+            "name": "form",
+            "type": "String",
+            "params": [
+              {
+                "name": "action",
+                "type": "String"
+              },
+              {
+                "name": "path",
+                "type": "String"
+              },
+              {
+                "name": "method",
+                "type": "String"
+              }
+            ]
+          },
+          {
+            "name": "render",
             "type": "String",
             "params": [
               {
