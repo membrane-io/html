@@ -1,17 +1,39 @@
 import { nodes, root, state } from "membrane";
 
 export const Root = {
-  form: ({ args: { action, path, method } }) => {
+  form: ({ args: { action, path, method, title } }) => {
     // action.params
     // TODO: read from ref
+    // todo:one(id:1).update(dueDate:"2022-02-02",title:"demo")
+    // const params = [
+    //   {
+    //     name: "id",
+    //     type: "Int",
+    //     value: 1,
+    //   },
+    //   {
+    //     name: "title",
+    //     type: "String",
+    //     value: "2022-02-02",
+    //   },
+    //   {
+    //     name: "dueDate",
+    //     type: "String",
+    //     value: "demo",
+    //   },
+    // ];
+
+    // todo:add(dueDate:"2022-02-02",title:"demo")
     const params = [
       {
         name: "title",
         type: "String",
+        value: ""
       },
       {
         name: "dueDate",
         type: "String",
+        value: ""
       },
     ];
 
@@ -19,6 +41,7 @@ export const Root = {
     let html: string = "";
     for (const item of params) {
       const name: string = item.name;
+      const value: any = item.value;
       let type: string = "";
       switch (item.type) {
         case "String":
@@ -43,7 +66,7 @@ export const Root = {
         `
       <div class="pront">
         <label class="large-label" for="${name}">${name}:</label>
-        <input class="block-content" type="${type}" id="${name}" name="${name}">
+        <input class="block-content" value="${value}" type="${type}" id="${name}" name="${name}">
       </div>
     `;
     }
@@ -52,7 +75,7 @@ export const Root = {
         <div class="block header">
           <div class="block section-title3">
             <div class="block section-title2">
-              <div class="block section-title">Add task</div>
+              <div class="block section-title">${title}</div>
             </div>
           </div>
         </div>
@@ -65,23 +88,119 @@ export const Root = {
             </div>
           </div>
         </div>
-      </form>`
-    );
+      </form>`);
   },
-  render: ({ args }) => {},
+  render: ({ args: { field, url } }) => {
+    // TODO: get Schema Fields?
+    const fields = [
+      {
+        name: "id",
+        type: "Int",
+        value: "1",
+      },
+      {
+        name: "title",
+        type: "String",
+        value: "todo name",
+      },
+      {
+        name: "dueDate",
+        type: "String",
+        value: "1900-09-09",
+      },
+    ];
+    // TODO: get actions and params from Schema
+    const actions = [
+      {
+        name: "update",
+        type: "Void",
+        params: [
+          {
+            name: "title",
+            type: "String",
+          },
+          {
+            name: "dueDate",
+            type: "String",
+          },
+        ],
+      },
+      {
+        name: "remove",
+        type: "Void",
+        params: [],
+      },
+    ];
+
+    let htmlFields: string = "";
+    for (const item of fields) {
+      const { value, type, name} = item;
+      htmlFields =
+        htmlFields +
+        `<h4><span data-tooltip="${type}">${name}: ${value}</span></h4> ` // TODO: Add value;
+    }
+
+    let htmlActions: string = "";
+    for (const item of actions) {
+      const { name, type } = item;
+      htmlActions =
+        htmlActions +
+        `<a href="/todo"><h4><span data-tooltip="${type}">${name}</span></h4></a>`;
+    }
+
+    return base(`
+        <div>
+          <div>
+            <h2>Fields</h2>
+            ${htmlFields}
+          <div>
+          <div>
+            <h2>Actions</h2>
+            ${htmlActions}
+          </div>
+        </div>
+       `);
+  },
 };
 
 function base(code: string) {
   return `  <!DOCTYPE html>
   <html>
     <head>
-      <title>html demo</title>
+      <title>Membrane.io - Program</title>
       <link href="https://fonts.cdnfonts.com/css/roboto-mono" rel="stylesheet" />
       <link
         rel="stylesheet"
         href="https://eteekin.eus/wp-content/uploads/2018/11/normalize_reset.css"
       />
       <style>
+      [data-tooltip] {
+        position: relative;
+        border-bottom: 1px dashed #000;
+        cursor: help
+      }
+      
+      [data-tooltip]::after {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        content: attr(data-tooltip);
+        right: calc(100% + 10px);
+        border-radius: 0px;
+        box-shadow: 0 0 1px 1px rgb(100 100 100 / 60%);
+        background-color: white;
+        z-index: 10;
+        padding: 8px;
+        width: 60px;
+        transform: translateY(-20px);
+        transition: all 150ms cubic-bezier(.25, .8, .25, 1);
+      }
+      
+      [data-tooltip]:hover::after {
+        opacity: 1;
+        transform: translateY(0);
+        transition-duration: 300ms;
+      }
       body {
         margin: 0;
         background-color: #f9f9f9;
@@ -106,6 +225,7 @@ function base(code: string) {
 
       input[type="email"],
       input[type="text"],
+      input[type="number"],
       select,
       textarea {
         display: block;

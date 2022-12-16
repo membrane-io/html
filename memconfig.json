@@ -19,6 +19,10 @@
               {
                 "name": "method",
                 "type": "String"
+              },
+              {
+                "name": "title",
+                "type": "String"
               }
             ]
           },
@@ -27,15 +31,11 @@
             "type": "String",
             "params": [
               {
-                "name": "action",
+                "name": "field",
                 "type": "String"
               },
               {
-                "name": "path",
-                "type": "String"
-              },
-              {
-                "name": "method",
+                "name": "url",
                 "type": "String"
               }
             ]
