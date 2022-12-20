@@ -1,15 +1,88 @@
 {
   "types": {
-    "clock": {
-      "gref_hash": "da9d1c247b69702ed49d157f0d697d132f917d00f407438e43c7e438c837c024",
-      "type": "sys-clock:Root"
-    },
     "process": {
       "gref_hash": "c7a6cc4739f2a6aa697342cf67d4924b8be757dbc2bd9eae395bc939f10d54ea",
       "type": "sys-process:Root"
+    },
+    "graph": {
+      "gref_hash": "39b0ef014621e099053664bbc90f08394986b25a8da92bb7ea0aa1cb498104fd",
+      "type": "sys-graph:Root"
+    },
+    "clock": {
+      "gref_hash": "da9d1c247b69702ed49d157f0d697d132f917d00f407438e43c7e438c837c024",
+      "type": "sys-clock:Root"
     }
   },
   "imports": [
+    {
+      "name": "sys-graph",
+      "schema": {
+        "types": [
+          {
+            "name": "Root",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "typeInfo",
+                "description": "Allows programs to inspect the type of an arbitrary gref. The type info is returned as a JSON string",
+                "type": "String",
+                "params": [
+                  {
+                    "name": "gref",
+                    "type": "Gref"
+                  }
+                ],
+                "hints": {}
+              },
+              {
+                "name": "argsInfo",
+                "description": "Allows programs to inspect the args accepted by an arbitrary gref. The args info is returned as a JSON string",
+                "type": "String",
+                "params": [
+                  {
+                    "name": "gref",
+                    "type": "Gref"
+                  }
+                ],
+                "hints": {}
+              }
+            ],
+            "events": []
+          }
+        ],
+        "imports": []
+      },
+      "source": {
+        "Program": "tbd"
+      }
+    },
+    {
+      "name": "sys-process",
+      "schema": {
+        "types": [
+          {
+            "name": "Root",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "endpointUrl",
+                "description": "Gets the program's own endpoint URL",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          }
+        ],
+        "imports": []
+      },
+      "source": {
+        "Program": "tbd"
+      }
+    },
     {
       "name": "sys-clock",
       "schema": {
@@ -83,32 +156,6 @@
               {
                 "name": "id",
                 "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          }
-        ],
-        "imports": []
-      },
-      "source": {
-        "Program": "tbd"
-      }
-    },
-    {
-      "name": "sys-process",
-      "schema": {
-        "types": [
-          {
-            "name": "Root",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "endpointUrl",
-                "description": "Gets the program's own endpoint URL",
                 "type": "String",
                 "params": [],
                 "hints": {}

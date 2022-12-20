@@ -1,47 +1,14 @@
 import { nodes, root, state } from "membrane";
 
 export const Root = {
-  form: ({ args: { action, path, method, title } }) => {
-    // action.params
-    // TODO: read from ref
-    // todo:one(id:1).update(dueDate:"2022-02-02",title:"demo")
-    // const params = [
-    //   {
-    //     name: "id",
-    //     type: "Int",
-    //     value: 1,
-    //   },
-    //   {
-    //     name: "title",
-    //     type: "String",
-    //     value: "2022-02-02",
-    //   },
-    //   {
-    //     name: "dueDate",
-    //     type: "String",
-    //     value: "demo",
-    //   },
-    // ];
+  form: async ({ args: { action, path, method, title } }) => {
+    const params = JSON.parse(
+      JSON.parse(await nodes.graph.argsInfo({ gref: action }).$get())
+    );
 
-    // todo:add(dueDate:"2022-02-02",title:"demo")
-    const params = [
-      {
-        name: "title",
-        type: "String",
-        value: ""
-      },
-      {
-        name: "dueDate",
-        type: "String",
-        value: ""
-      },
-    ];
-
-    // extract fields
     let html: string = "";
     for (const item of params) {
       const name: string = item.name;
-      const value: any = item.value;
       let type: string = "";
       switch (item.type) {
         case "String":
@@ -64,12 +31,13 @@ export const Root = {
       html =
         html +
         `
-      <div class="pront">
-        <label class="large-label" for="${name}">${name}:</label>
-        <input class="block-content" value="${value}" type="${type}" id="${name}" name="${name}">
-      </div>
-    `;
+        <div class="pront">
+          <label class="large-label" for="${name}">${name}:</label>
+          <input class="block-content" type="${type}" id="${name}" name="${name}">
+        </div>
+      `;
     }
+
     return base(`
       <form action="${path}" class="block-content centered" method="${method}">
         <div class="block header">
@@ -90,62 +58,21 @@ export const Root = {
         </div>
       </form>`);
   },
-  render: ({ args: { field, url } }) => {
-    // TODO: get Schema Fields?
-    const fields = [
-      {
-        name: "id",
-        type: "Int",
-        value: "1",
-      },
-      {
-        name: "title",
-        type: "String",
-        value: "todo name",
-      },
-      {
-        name: "dueDate",
-        type: "String",
-        value: "1900-09-09",
-      },
-    ];
-    // TODO: get actions and params from Schema
-    const actions = [
-      {
-        name: "update",
-        type: "Void",
-        params: [
-          {
-            name: "title",
-            type: "String",
-          },
-          {
-            name: "dueDate",
-            type: "String",
-          },
-        ],
-      },
-      {
-        name: "remove",
-        type: "Void",
-        params: [],
-      },
-    ];
+  render: async ({ args: { field, query } }) => {
+    const { fields } = JSON.parse(
+      JSON.parse(await nodes.graph.typeInfo({ gref: field }).$get())
+    );
+
+    const values = JSON.parse(await field.$query(query));
 
     let htmlFields: string = "";
     for (const item of fields) {
-      const { value, type, name} = item;
-      htmlFields =
-        htmlFields +
-        `<h4><span data-tooltip="${type}">${name}: ${value}</span></h4> ` // TODO: Add value;
-    }
-
-    let htmlActions: string = "";
-    for (const item of actions) {
-      const { name, type } = item;
-      htmlActions =
-        htmlActions +
-        `<a href="/todo"><h4><span data-tooltip="${type}">${name}</span></h4></a>`;
+      const { type, name } = item;
+      if (!(name === "gref")) {
+        htmlFields =
+          htmlFields +
+          `<h4><span data-tooltip="${type}">${name}: ${values[name]}</span></h4> `;
+      }
     }
 
     return base(`
@@ -154,12 +81,8 @@ export const Root = {
             <h2>Fields</h2>
             ${htmlFields}
           <div>
-          <div>
-            <h2>Actions</h2>
-            ${htmlActions}
-          </div>
         </div>
-       `);
+    `);
   },
 };
 
@@ -550,9 +473,20 @@ function base(code: string) {
 
         /*! CSS Used fontfaces */
         @font-face {
-          font-family: MonoBold;
-          src: url(https://www.membrane.io/Font-Bold.woff) format("woff");
+          font-family: MonoRegular;
+          src: url(https://www.membrane.io/Font-Regular.woff) format("woff")
         }
+        
+        @font-face {
+          font-family: MonoBold;
+          src: url(https://www.membrane.io/Font-Bold.woff) format("woff")
+        }
+        
+        @font-face {
+          font-family: MonoItalic;
+          src: url(https://www.membrane.io/Font-Italic.woff) format("woff")
+        }
+      
       </style>
     </head>
     <body>

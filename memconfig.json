@@ -3,6 +3,14 @@
     "types": [
       {
         "name": "Root",
+        "actions": [
+          {
+            "name": "get",
+            "description": "graph",
+            "type": "String",
+            "params": []
+          }
+        ],
         "fields": [
           {
             "name": "form",
@@ -10,7 +18,8 @@
             "params": [
               {
                 "name": "action",
-                "type": "String"
+                "type": "Ref",
+                "ofType": "String"
               },
               {
                 "name": "path",
@@ -32,10 +41,11 @@
             "params": [
               {
                 "name": "field",
-                "type": "String"
+                "type": "Ref",
+                "ofType": "String"
               },
               {
-                "name": "url",
+                "name": "query",
                 "type": "String"
               }
             ]
@@ -43,5 +53,8 @@
         ]
       }
     ]
+  },
+  "dependencies": {
+    "graph": "sys-graph:"
   }
 }
