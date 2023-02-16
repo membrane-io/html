@@ -3,6 +3,7 @@
     "types": [
       {
         "name": "Root",
+        "description": "Generate HTML templates",
         "actions": [
           {
             "name": "get",
