@@ -1,7 +1,7 @@
 import { nodes, root, state } from "membrane";
 
 export const Root = {
-  form: async ({ args: { action, path, method, title } }) => {
+  form: async ({ action, path, method, title }) => {
     const params = JSON.parse(
       JSON.parse(await nodes.graph.argsInfo({ gref: action }).$get())
     );
@@ -58,7 +58,7 @@ export const Root = {
         </div>
       </form>`);
   },
-  render: async ({ args: { field, query } }) => {
+  render: async ({ field, query }) => {
     const { fields } = JSON.parse(
       JSON.parse(await nodes.graph.typeInfo({ gref: field }).$get())
     );
